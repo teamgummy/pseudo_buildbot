@@ -5,19 +5,17 @@
 # select device and prepare varibles
 BUILD_ROOT=`pwd`
 cd $BUILD_ROOT
-. build/envsetup.sh
+if [ $2 = "toro" ] || [ $2 = "maguro" ] || [ $2 = "toroplus" ]; then
+    . build/envsetup.sh
+else
+    . build/envsetup2.sh
+fi
 lunch $1
 
 TARGET_VENDOR=$(echo $TARGET_PRODUCT | cut -f1 -d '_')
 
 # bacon check
-if [ "$(grep -m 1 bacon build/envsetup.sh)" = "" ]; then
-    echo "Y U NO MAKE BACON?!"
-    BACON=false
-else
-    BACON=true
-fi
-
+BACON=true
 # create log dir if not already present
 if test ! -d "$ANDROID_PRODUCT_OUT"
     echo "$ANDROID_PRODUCT_OUT doesn't exist, creating now"
@@ -26,7 +24,7 @@ fi
 
 # build
 if [ "$BACON" = "true" ]; then
-    make -j$(($(grep processor /proc/cpuinfo | wc -l) * 2)) bacon 2>&1 | tee "$ANDROID_PRODUCT_OUT"/"$TARGET_PRODUCT"_bot.log
+    make -j$(($(grep processor /proc/cpuinfo | wc -l) * 2)) gummy 2>&1 | tee "$ANDROID_PRODUCT_OUT"/"$TARGET_PRODUCT"_bot.log
 else
     make -j$(($(grep processor /proc/cpuinfo | wc -l) * 2)) otapackage 2>&1 | tee "$ANDROID_PRODUCT_OUT"/"$TARGET_PRODUCT"_bot.log
 fi
