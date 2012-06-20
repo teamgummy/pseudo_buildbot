@@ -28,15 +28,18 @@ if [ "$BACON" = "true" ]; then
 else
     make -j$(($(grep processor /proc/cpuinfo | wc -l) * 2)) otapackage 2>&1 | tee "$ANDROID_PRODUCT_OUT"/"$TARGET_PRODUCT"_bot.log
 fi
-
+echo deleting old zips
 # clean out of previous zip
 if [ "$BACON" = "true" ]; then
     ZIP=$(tail -2 "$ANDROID_PRODUCT_OUT"/"$TARGET_PRODUCT"_bot.log | cut -f3 -d ' ' | cut -f1 -d ' ' | sed -e '/^$/ d')
 else
     ZIP=$(grep "Package OTA" "$ANDROID_PRODUCT_OUT"/"$TARGET_PRODUCT"_bot.log | cut -f5 -d '/')
 fi
+mkdir ../upload
+echo rm outd/zip
 OUTD=$(echo $(cd ../upload && pwd))
 rm $OUTD/$ZIP
+echo cp zip to outd
 cp "$ANDROID_PRODUCT_OUT"/$ZIP $OUTD/$ZIP
 
 # finish
