@@ -65,3 +65,4 @@ else
 fi
 
 cd $BUILD_ROOT
+rm -rf out/target/product/$2
