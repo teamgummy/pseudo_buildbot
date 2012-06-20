@@ -1,0 +1,6 @@
+#!/bin/bash
+#
+# this is kind of dirty nasty, but create directories, then upload
+#
+
+rsync -avz $2 website@androtransfer.com:~/androtransfer.com/public_html/Gummy/$1/$2
